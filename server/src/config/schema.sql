@@ -59,6 +59,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS members_updated_at ON members;
 CREATE TRIGGER members_updated_at
   BEFORE UPDATE ON members
   FOR EACH ROW EXECUTE FUNCTION update_updated_at();
