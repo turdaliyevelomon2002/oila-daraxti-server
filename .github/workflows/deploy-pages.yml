@@ -28,7 +28,16 @@ jobs:
       - name: Build Angular
         run: cd client && npm run build -- --base-href /oila-daraxti-server/
 
-      - name: Copy index.html to 404.html (SPA routing fix)
+      - name: Install rsvg-convert (SVG to PNG)
+        run: sudo apt-get install -y librsvg2-bin
+
+      - name: Convert SVG icons to PNG
+        run: |
+          mkdir -p client/dist/client/browser/icons
+          rsvg-convert -w 192 -h 192 client/public/icons/icon-192.svg -o client/dist/client/browser/icons/icon-192.png
+          rsvg-convert -w 512 -h 512 client/public/icons/icon-512.svg -o client/dist/client/browser/icons/icon-512.png
+
+      - name: Copy index.html to 404.html
         run: cp client/dist/client/browser/index.html client/dist/client/browser/404.html
 
       - name: Deploy to GitHub Pages
