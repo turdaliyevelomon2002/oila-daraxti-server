@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateService, Lang } from '../../core/services/translate';
 import { NotificationService } from '../../core/services/notification';
 import { ThemeService } from '../../core/services/theme';
+import { AuthService } from '../../core/services/auth';
 
 @Component({
   selector: 'app-header',
@@ -16,9 +17,11 @@ export class HeaderComponent {
   constructor(
     public translate: TranslateService,
     public notif: NotificationService,
-    public themeService: ThemeService
+    public themeService: ThemeService,
+    public auth: AuthService,
   ) {}
 
   t(key: string) { return this.translate.t(key); }
   setLang(lang: Lang) { this.translate.load(lang); }
+  get adminLink() { return this.auth.isLoggedIn() ? '/admin' : '/admin/login'; }
 }
