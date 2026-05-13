@@ -1,0 +1,48 @@
+<div class="tree-level">
+  @for (node of nodes; track trackById($index, node)) {
+    <div class="tree-branch">
+      <div class="couple-row">
+        <!-- Main node -->
+        <a [routerLink]="['/member', node.id]" class="tree-node" [class.male]="node.gender === 'male'" [class.female]="node.gender === 'female'" [class.deceased]="node.death_date">
+          <div class="node-avatar">
+            @if (getPhoto(node)) {
+              <img [src]="getPhoto(node)" [alt]="getName(node)" />
+            } @else {
+              <div class="node-initials">{{ getInitials(node) }}</div>
+            }
+          </div>
+          <div class="node-name">{{ getName(node) }}</div>
+          @if (getBirthYear(node)) {
+            <div class="node-year">{{ getBirthYear(node) }}</div>
+          }
+        </a>
+
+        <!-- Spouse -->
+        @if (node.spouse) {
+          <div class="spouse-connector">
+            <div class="heart">♥</div>
+          </div>
+          <a [routerLink]="['/member', node.spouse.id]" class="tree-node spouse-node" [class.male]="node.spouse.gender === 'male'" [class.female]="node.spouse.gender === 'female'" [class.deceased]="node.spouse.death_date">
+            <div class="node-avatar">
+              @if (getPhoto(node.spouse)) {
+                <img [src]="getPhoto(node.spouse)" [alt]="getName(node.spouse)" />
+              } @else {
+                <div class="node-initials">{{ getInitials(node.spouse) }}</div>
+              }
+            </div>
+            <div class="node-name">{{ getName(node.spouse) }}</div>
+            @if (getBirthYear(node.spouse)) {
+              <div class="node-year">{{ getBirthYear(node.spouse) }}</div>
+            }
+          </a>
+        }
+      </div>
+
+      <!-- Children -->
+      @if (hasChildren(node)) {
+        <div class="connector-line"></div>
+        <app-family-tree [nodes]="node.children!" />
+      }
+    </div>
+  }
+</div>

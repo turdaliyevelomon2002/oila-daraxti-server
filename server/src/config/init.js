@@ -9,6 +9,9 @@ async function initDatabase() {
   await pool.query(
     `ALTER TABLE members ADD COLUMN IF NOT EXISTS mother_id INT REFERENCES members(id) ON DELETE SET NULL`
   );
+  await pool.query(
+    `ALTER TABLE members ADD COLUMN IF NOT EXISTS telegram_chat_id BIGINT`
+  );
 
   const existing = await pool.query('SELECT id FROM admins WHERE username = $1', [
     process.env.ADMIN_USERNAME,

@@ -1,0 +1,146 @@
+@if (loading()) {
+  <div class="spinner"></div>
+} @else if (member()) {
+<div class="profile-page">
+
+  <!-- Hero Banner -->
+  <div class="profile-hero" [class.male-hero]="member()!.gender === 'male'" [class.female-hero]="member()!.gender === 'female'">
+    <div class="hero-inner">
+      <a routerLink="/home" class="back-btn">← {{ t('BACK') }}</a>
+      @if (auth.isLoggedIn()) {
+        <a [routerLink]="['/admin/edit', member()!.id]" class="btn btn-outline btn-sm">✏️ {{ t('EDIT_MEMBER') }}</a>
+      }
+    </div>
+
+    <div class="profile-hero-content">
+      <div class="profile-avatar-wrap">
+        @if (photoUrl) {
+          <img [src]="photoUrl" [alt]="getName(member())" class="profile-avatar" (click)="openLightbox(photoUrl!)" />
+        } @else {
+          <div class="profile-avatar-placeholder" [class.male]="member()!.gender === 'male'" [class.female]="member()!.gender === 'female'">
+            {{ getInitials(member()) }}
+          </div>
+        }
+      </div>
+
+      <div class="profile-info">
+        <h1 class="profile-name">{{ getName(member()) }}</h1>
+        <div class="profile-badges">
+          <span class="badge" [class]="member()!.gender === 'male' ? 'badge-male' : 'badge-female'">
+            {{ t(member()!.gender === 'male' ? 'MALE' : 'FEMALE') }}
+          </span>
+          <span class="badge badge-gold">{{ t('GENERATION') }} {{ member()!.generation }}</span>
+          <span class="badge" [class]="member()!.death_date ? 'badge-deceased' : 'badge-alive'">
+            {{ t(member()!.death_date ? 'DECEASED' : 'ALIVE') }}
+          </span>
+        </div>
+        <div class="profile-dates">
+          @if (member()!.birth_date) {
+            <span>🗓 {{ t('BORN') }}: <strong>{{ formatDate(member()!.birth_date) }}</strong></span>
+          }
+          @if (member()!.death_date) {
+            <span>🕊 {{ t('DIED') }}: <strong>{{ formatDate(member()!.death_date) }}</strong></span>
+          }
+          @if (age !== null) {
+            <span>📅 {{ age }} {{ member()!.death_date ? t('YEARS_OF_LIFE') : t('YEARS_OLD') }}</span>
+          }
+        </div>
+        @if (member()!.phone || member()!.email) {
+          <div class="profile-contacts">
+            @if (member()!.phone) { <a [href]="'tel:' + member()!.phone" class="contact-item">📞 {{ member()!.phone }}</a> }
+            @if (member()!.email) { <a [href]="'mailto:' + member()!.email" class="contact-item">✉️ {{ member()!.email }}</a> }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="profile-body">
+
+    <!-- Biography -->
+    @if (getBio(member())) {
+      <section class="section">
+        <h2 class="section-title">{{ t('ABOUT') }}</h2>
+        <div class="gold-divider"></div>
+        <p class="bio-text">{{ getBio(member()) }}</p>
+      </section>
+    }
+
+    <!-- Family Connections -->
+    <section class="section">
+      <h2 class="section-title">{{ t('FAMILY_CONNECTIONS') }}</h2>
+      <div class="gold-divider"></div>
+      <div class="connections-grid">
+
+        @if (member()!.spouse) {
+          <div class="conn-group">
+            <h3 class="conn-title">💑 {{ t('SPOUSE') }}</h3>
+            <app-member-card [member]="member()!.spouse!" [compact]="true" />
+          </div>
+        }
+
+        @if (member()!.parent) {
+          <div class="conn-group">
+            <h3 class="conn-title">👴 {{ t('PARENTS') }}</h3>
+            <app-member-card [member]="member()!.parent!" [compact]="true" />
+          </div>
+        }
+
+        @if (member()!.children && member()!.children!.length > 0) {
+          <div class="conn-group full-width">
+            <h3 class="conn-title">👶 {{ t('CHILDREN') }} ({{ member()!.children!.length }})</h3>
+            <div class="children-grid">
+              @for (child of member()!.children!; track child.id) {
+                <app-member-card [member]="child" [compact]="true" />
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Photo Gallery -->
+    @if (images.length > 0) {
+      <section class="section">
+        <h2 class="section-title">📷 {{ t('GALLERY') }}</h2>
+        <div class="gold-divider"></div>
+        <div class="media-grid">
+          @for (img of images; track img.id) {
+            <div class="media-item" (click)="openLightbox(mediaUrl(img.url))">
+              <img [src]="mediaUrl(img.url)" [alt]="img.caption || ''" />
+              <div class="media-overlay">
+                <span style="color:#fff;font-size:24px;">🔍</span>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- Videos -->
+    @if (videos.length > 0) {
+      <section class="section">
+        <h2 class="section-title">🎬 {{ t('VIDEOS') }}</h2>
+        <div class="gold-divider"></div>
+        <div class="videos-grid">
+          @for (vid of videos; track vid.id) {
+            <div class="video-item">
+              <video controls [src]="mediaUrl(vid.url)"></video>
+              @if (vid.caption) { <p class="media-caption">{{ vid.caption }}</p> }
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+  </div>
+</div>
+}
+
+<!-- Lightbox -->
+@if (lightboxSrc()) {
+  <div class="lightbox" (click)="closeLightbox()">
+    <img [src]="lightboxSrc()!" alt="" />
+    <button class="lightbox-close" (click)="closeLightbox()">✕</button>
+  </div>
+}

@@ -1,0 +1,127 @@
+.member-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: var(--transition);
+  }
+
+  &.male::before { background: linear-gradient(90deg, var(--male), transparent); }
+  &.female::before { background: linear-gradient(90deg, var(--female), transparent); }
+
+  &:hover {
+    border-color: var(--border-gold);
+    box-shadow: var(--shadow-gold);
+    transform: translateY(-2px);
+
+    &::before { opacity: 1; }
+  }
+
+  &.compact {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+
+    .info .name { font-size: 13px; }
+    .card-top { flex-shrink: 0; }
+  }
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.avatar-wrap {
+  position: relative;
+}
+
+.avatar, .avatar-placeholder {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  border: 2px solid;
+
+  &.male { background: rgba(74, 158, 255, 0.1); color: var(--male); border-color: rgba(74, 158, 255, 0.3); }
+  &.female { background: rgba(255, 110, 180, 0.1); color: var(--female); border-color: rgba(255, 110, 180, 0.3); }
+}
+
+.avatar { border: 2px solid var(--border-gold); }
+
+.alive-dot {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--success);
+  border: 2px solid var(--bg-card);
+}
+
+.gen-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold);
+  background: var(--gold-muted);
+  border: 1px solid var(--border-gold);
+  border-radius: 10px;
+  padding: 2px 7px;
+  letter-spacing: 0.3px;
+}
+
+.info {
+  overflow: hidden;
+
+  .name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    display: flex;
+    gap: 8px;
+  }
+
+  .badges {
+    display: flex;
+    gap: 5px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+}

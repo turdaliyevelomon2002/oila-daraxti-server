@@ -1,0 +1,33 @@
+<a [routerLink]="['/member', member.id]" class="member-card" [class.compact]="compact" [class.male]="member.gender === 'male'" [class.female]="member.gender === 'female'">
+  <div class="card-top">
+    <div class="avatar-wrap">
+      @if (photoUrl) {
+        <img [src]="photoUrl" [alt]="name" class="avatar" />
+      } @else {
+        <div class="avatar-placeholder" [class]="member.gender">{{ initials }}</div>
+      }
+      @if (isAlive) {
+        <span class="alive-dot"></span>
+      }
+    </div>
+    <span class="gen-badge">{{ member.generation }}-avl.</span>
+  </div>
+
+  <div class="info">
+    <div class="name">{{ name }}</div>
+    @if (!compact) {
+      <div class="meta">
+        @if (birthYear) { <span>{{ birthYear }}</span> }
+        @if (age !== null) { <span>{{ age }} {{ t('YEARS_OLD') }}</span> }
+      </div>
+      <div class="badges">
+        <span class="badge" [class]="member.gender === 'male' ? 'badge-male' : 'badge-female'">
+          {{ t(member.gender === 'male' ? 'MALE' : 'FEMALE') }}
+        </span>
+        @if (!isAlive) {
+          <span class="badge badge-deceased">{{ t('DECEASED') }}</span>
+        }
+      </div>
+    }
+  </div>
+</a>

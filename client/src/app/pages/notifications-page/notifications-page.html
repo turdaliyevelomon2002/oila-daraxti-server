@@ -1,0 +1,48 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="section-title">🔔 {{ t('NAV_NOTIFICATIONS') }}</h1>
+      @if (unreadCount > 0) {
+        <p class="unread-label">{{ unreadCount }} ta o'qilmagan</p>
+      }
+    </div>
+    @if (notifications().length > 0) {
+      <button class="btn btn-outline btn-sm" (click)="markAll()">✓ {{ t('MARK_ALL_READ') }}</button>
+    }
+  </div>
+  <div class="gold-divider"></div>
+
+  @if (loading()) {
+    <div class="spinner"></div>
+  } @else if (notifications().length === 0) {
+    <div class="empty-state">
+      <div class="icon">🔕</div>
+      <p>{{ t('NO_NOTIFICATIONS') }}</p>
+      <small>Tug'ilgan kunlar yaqinlashganda bu yerda ko'rinadi</small>
+    </div>
+  } @else {
+    <div class="notif-list">
+      @for (n of notifications(); track n.id) {
+        <div class="notif-item" [class.unread]="!n.is_read" (click)="markRead(n)">
+          <div class="notif-avatar">
+            @if (photoUrl(n.photo_url)) {
+              <img [src]="photoUrl(n.photo_url)!" alt="" />
+            } @else {
+              <div class="notif-avatar-icon">🎂</div>
+            }
+          </div>
+          <div class="notif-content">
+            <p class="notif-message">{{ getMessage(n) }}</p>
+            <div class="notif-meta">
+              <span class="notif-date">📅 {{ formatDate(n.created_at) }}</span>
+              @if (!n.is_read) {
+                <span class="unread-chip">Yangi</span>
+              }
+            </div>
+          </div>
+          <a [routerLink]="['/member', n.member_id]" class="notif-link-btn" (click)="$event.stopPropagation()" title="Profilga o'tish">→</a>
+        </div>
+      }
+    </div>
+  }
+</div>

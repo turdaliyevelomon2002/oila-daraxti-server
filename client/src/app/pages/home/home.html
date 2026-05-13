@@ -1,0 +1,108 @@
+<div class="page">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-left">
+      <h1 class="hero-title">🌳 {{ t('APP_TITLE') }}</h1>
+      <p class="hero-subtitle">Oila tarixi, avlodlar va xotiralar</p>
+    </div>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-value">{{ totalCount }}</div>
+        <div class="stat-label">{{ t('TOTAL_MEMBERS') }}</div>
+      </div>
+      <div class="stat-card gen-card">
+        <div class="stat-value">{{ generationCount }}</div>
+        <div class="stat-label">Avlodlar</div>
+      </div>
+      @if (todayBirthdays.length > 0) {
+        <div class="stat-card birthday-card">
+          <div class="stat-value">🎂 {{ todayBirthdays.length }}</div>
+          <div class="stat-label">{{ t('TODAY_BIRTHDAYS') }}</div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Birthday alert -->
+  @if (todayBirthdays.length > 0) {
+    <div class="birthday-alert">
+      <span class="birthday-icon">🎉</span>
+      <span>
+        @for (m of todayBirthdays; track m.id; let last = $last) {
+          <strong>{{ translate.getName(m) }}</strong>@if (!last){, }
+        }
+        — {{ t('BIRTHDAY_TODAY') }}
+      </span>
+    </div>
+  }
+
+  <div class="gold-divider"></div>
+
+  <!-- Search & View Toggle -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input
+        class="search-input"
+        type="text"
+        [placeholder]="t('SEARCH_PLACEHOLDER')"
+        (input)="setSearch($event)"
+      />
+    </div>
+    <div class="view-toggle">
+      <button class="toggle-btn" [class.active]="view() === 'tree'" (click)="setView('tree')">🌲 Shajara</button>
+      <button class="toggle-btn" [class.active]="view() === 'grid'" (click)="setView('grid')">⊞ Ro'yxat</button>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="spinner"></div>
+  } @else {
+
+    <!-- Tree View -->
+    @if (view() === 'tree' && !searchQuery()) {
+      <div class="tree-container">
+        @if (treeData().length === 0) {
+          <div class="empty-state">
+            <div class="icon">🌱</div>
+            <p>{{ t('NO_DATA') }}</p>
+          </div>
+        } @else {
+          <app-family-tree [nodes]="treeData()" />
+        }
+      </div>
+    }
+
+    <!-- Grid View -->
+    @if (view() === 'grid' || searchQuery()) {
+      @if (searchQuery()) {
+        <!-- Search results flat -->
+        <div class="members-grid">
+          @for (m of filteredMembers; track m.id) {
+            <app-member-card [member]="m" />
+          } @empty {
+            <div class="empty-state" style="grid-column:1/-1">
+              <div class="icon">🔍</div>
+              <p>{{ t('NO_DATA') }}</p>
+            </div>
+          }
+        </div>
+      } @else {
+        <!-- Grouped by generation -->
+        @for (gen of generationGroups; track gen.num) {
+          <div class="gen-section">
+            <div class="gen-header">
+              <span class="gen-num">{{ gen.num }}-avlod</span>
+              <span class="gen-count">{{ gen.members.length }} kishi</span>
+            </div>
+            <div class="members-grid">
+              @for (m of gen.members; track m.id) {
+                <app-member-card [member]="m" />
+              }
+            </div>
+          </div>
+        }
+      }
+    }
+  }
+</div>

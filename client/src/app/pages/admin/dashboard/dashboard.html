@@ -1,0 +1,115 @@
+<app-admin-bar />
+
+<div class="page admin-page">
+
+  @if (message()) {
+    <div class="alert alert-success">{{ message() }}</div>
+  }
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="stat-num">{{ totalCount }}</div>
+      <div class="stat-label">Jami a'zolar</div>
+    </div>
+    <div class="stat-box male-box">
+      <div class="stat-num">{{ maleCount }}</div>
+      <div class="stat-label">Erkaklar</div>
+    </div>
+    <div class="stat-box female-box">
+      <div class="stat-num">{{ femaleCount }}</div>
+      <div class="stat-label">Ayollar</div>
+    </div>
+    <div class="stat-box gen-box">
+      <div class="stat-num">{{ generationCount }}</div>
+      <div class="stat-label">Avlodlar</div>
+    </div>
+    <div class="stat-box birthday-box">
+      <div class="stat-num">🎂 {{ todayBirthdays }}</div>
+      <div class="stat-label">Bugungi t.kunlar</div>
+    </div>
+  </div>
+
+  <!-- Table header -->
+  <div class="table-header">
+    <h2 class="table-title">A'zolar ro'yxati <span class="count-chip">{{ totalCount }}</span></h2>
+    <a routerLink="/admin/add" class="btn btn-gold btn-sm">+ A'zo qo'shish</a>
+  </div>
+
+  @if (loading()) {
+    <div class="spinner"></div>
+  } @else {
+    <div class="table-wrap">
+      <table class="members-table">
+        <thead>
+          <tr>
+            <th>Avlod</th>
+            <th>Ismi</th>
+            <th>Jins</th>
+            <th>Tug'ilgan sana</th>
+            <th>Holati</th>
+            <th>Amallar</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (m of members(); track m.id; let i = $index) {
+            <tr [class.today-birthday]="isTodayBirthday(m)">
+              <td>
+                <span class="gen-badge">{{ m.generation }}</span>
+              </td>
+              <td class="td-name">
+                <div class="member-name-cell">
+                  @if (m.photo_url) {
+                    <img [src]="'https://oila-daraxti-server.onrender.com' + m.photo_url" class="table-avatar" alt="" />
+                  } @else {
+                    <div class="table-avatar-placeholder" [class]="m.gender">
+                      {{ getName(m).charAt(0) }}
+                    </div>
+                  }
+                  <div>
+                    <div class="member-name">{{ getName(m) }}</div>
+                    @if (isTodayBirthday(m)) {
+                      <span class="birthday-tag">🎂 Bugun!</span>
+                    }
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge" [class]="m.gender === 'male' ? 'badge-male' : 'badge-female'">
+                  {{ m.gender === 'male' ? 'Erkak' : 'Ayol' }}
+                </span>
+              </td>
+              <td class="td-date">{{ m.birth_date ? (m.birth_date | slice:0:10) : '—' }}</td>
+              <td>
+                <span class="badge" [class]="m.death_date ? 'badge-deceased' : 'badge-alive'">
+                  {{ m.death_date ? 'Vafot' : 'Hayot' }}
+                </span>
+              </td>
+              <td class="td-actions">
+                <a [routerLink]="['/member', m.id]" class="action-btn view-btn" title="Ko'rish">👁</a>
+                <a [routerLink]="['/admin/edit', m.id]" class="action-btn edit-btn" title="Tahrirlash">✏️</a>
+                <button class="action-btn del-btn" (click)="confirmDelete(m.id)" title="O'chirish">🗑</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6" class="empty-row">Ma'lumot yo'q</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
+
+<!-- Delete Confirm Modal -->
+@if (deleteId() !== null) {
+  <div class="modal-overlay" (click)="cancelDelete()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-icon">⚠️</div>
+      <p>Haqiqatan ham o'chirmoqchimisiz?</p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" (click)="cancelDelete()">Bekor qilish</button>
+        <button class="btn btn-danger" (click)="doDelete()">O'chirish</button>
+      </div>
+    </div>
+  </div>
+}

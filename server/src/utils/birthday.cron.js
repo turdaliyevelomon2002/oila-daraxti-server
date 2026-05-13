@@ -26,9 +26,9 @@ async function checkTodayBirthdays() {
       );
 
       if (existing.rows.length === 0) {
-        const msgUz = `Bugun ${member.name_uz}ning tug'ilgan kuni! ${age} yosh to'ldi. Tabriklaymiz! 🎉`;
-        const msgRu = `Сегодня день рождения ${member.name_ru || member.name_uz}! Исполнилось ${age} лет. Поздравляем! 🎉`;
-        const msgEn = `Today is ${member.name_en || member.name_uz}'s birthday! Turning ${age} years old. Congratulations! 🎉`;
+        const msgUz = `🎂 Bugun ${member.name_uz}ning tug'ilgan kuni! ${age} yosh to'ldi. Tabriklaymiz! 🎉`;
+        const msgRu = `🎂 Сегодня день рождения ${member.name_ru || member.name_uz}! Исполнилось ${age} лет. Поздравляем! 🎉`;
+        const msgEn = `🎂 Today is ${member.name_en || member.name_uz}'s birthday! Turning ${age} years old. Congratulations! 🎉`;
 
         await pool.query(
           `INSERT INTO notifications (member_id, type, message_uz, message_ru, message_en, scheduled_for)
@@ -36,7 +36,18 @@ async function checkTodayBirthdays() {
           [member.id, msgUz, msgRu, msgEn]
         );
 
-        await sendTelegramMessage(`🎂 ${msgUz}`);
+        // Barcha telegram_chat_id bo'lgan a'zolarga yuboriladi
+        const allMembers = await pool.query(
+          `SELECT telegram_chat_id FROM members WHERE telegram_chat_id IS NOT NULL`
+        );
+        for (const m of allMembers.rows) {
+          await sendTelegramMessage(msgUz, m.telegram_chat_id);
+        }
+
+        // Agar hech kim chat_id qo'ymagan bo'lsa — admin chatiga yuboriladi
+        if (allMembers.rows.length === 0) {
+          await sendTelegramMessage(msgUz);
+        }
       }
     }
 
@@ -49,12 +60,8 @@ async function checkTodayBirthdays() {
 }
 
 function startBirthdayCron() {
-  // Server yoqilganda darhol tekshir
   checkTodayBirthdays();
-
-  // Har kuni soat 08:00 da tekshir
   cron.schedule('0 8 * * *', checkTodayBirthdays);
-
   console.log('Birthday cron ishga tushdi (har kuni 08:00 + server yoqilganda)');
 }
 

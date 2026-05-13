@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm *)",
+      "PowerShell(New-Item *)",
+      "Bash(npx ng *)",
+      "Bash(node -e \"require\\('dotenv'\\).config\\(\\); const {startBirthdayCron} = require\\('./src/utils/birthday.cron'\\); console.log\\('cron module OK'\\)\")",
+      "Bash(curl *)",
+      "Bash(powershell *)",
+      "Bash(node -e ' *)",
+      "Bash(node test-telegram.js)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\(p.dependencies\\)\")",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)"
+    ]
+  }
+}

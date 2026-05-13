@@ -4,6 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const initDatabase = require('./config/init');
 const { startBirthdayCron, checkTodayBirthdays } = require('./utils/birthday.cron');
+const { handleWebhook } = require('./utils/telegram.bot');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,6 +18,7 @@ app.post('/api/check-birthdays', async (req, res) => {
   await checkTodayBirthdays();
   res.json({ message: 'Tug\'ilgan kunlar tekshirildi' });
 });
+app.post('/api/telegram/webhook', handleWebhook);
 
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/members', require('./routes/members.routes'));

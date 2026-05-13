@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { sendTelegramMessage } = require('../utils/telegram.bot');
 
 async function getTree(req, res) {
   const all = await pool.query(
@@ -72,7 +73,7 @@ async function create(req, res) {
   const {
     name_uz, name_ru, name_en, birth_date, death_date, gender,
     generation, parent_id, mother_id, spouse_id, bio_uz, bio_ru, bio_en,
-    phone, email,
+    phone, email, telegram_chat_id,
   } = req.body;
 
   const photo_url = req.file ? `/uploads/${req.file.filename}` : null;
@@ -80,8 +81,8 @@ async function create(req, res) {
   const result = await pool.query(
     `INSERT INTO members
       (name_uz,name_ru,name_en,birth_date,death_date,gender,generation,
-       parent_id,mother_id,spouse_id,photo_url,bio_uz,bio_ru,bio_en,phone,email)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16)
+       parent_id,mother_id,spouse_id,photo_url,bio_uz,bio_ru,bio_en,phone,email,telegram_chat_id)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
      RETURNING *`,
     [
       name_uz, name_ru || null, name_en || null,
@@ -90,6 +91,7 @@ async function create(req, res) {
       parent_id || null, mother_id || null, spouse_id || null, photo_url,
       bio_uz || null, bio_ru || null, bio_en || null,
       phone || null, email || null,
+      telegram_chat_id ? BigInt(telegram_chat_id) : null,
     ]
   );
 
@@ -100,6 +102,11 @@ async function create(req, res) {
     ]);
   }
 
+  if (telegram_chat_id) {
+    const welcomeMsg = `Salom, ${name_uz}! 👋\n\nSiz oila daraxti tizimiga qo'shildingiz. Endi tug'ilgan kun eslatmalari va yangiliklar shu yerga keladi. 🌳`;
+    sendTelegramMessage(welcomeMsg, telegram_chat_id).catch(() => {});
+  }
+
   res.status(201).json(result.rows[0]);
 }
 
@@ -108,7 +115,7 @@ async function update(req, res) {
   const {
     name_uz, name_ru, name_en, birth_date, death_date, gender,
     generation, parent_id, mother_id, spouse_id, bio_uz, bio_ru, bio_en,
-    phone, email,
+    phone, email, telegram_chat_id,
   } = req.body;
 
   const existing = await pool.query('SELECT photo_url FROM members WHERE id = $1', [id]);
@@ -122,15 +129,17 @@ async function update(req, res) {
     `UPDATE members SET
       name_uz=$1, name_ru=$2, name_en=$3, birth_date=$4, death_date=$5,
       gender=$6, generation=$7, parent_id=$8, mother_id=$9, spouse_id=$10, photo_url=$11,
-      bio_uz=$12, bio_ru=$13, bio_en=$14, phone=$15, email=$16
-     WHERE id=$17 RETURNING *`,
+      bio_uz=$12, bio_ru=$13, bio_en=$14, phone=$15, email=$16, telegram_chat_id=$17
+     WHERE id=$18 RETURNING *`,
     [
       name_uz, name_ru || null, name_en || null,
       birth_date || null, death_date || null, gender,
       generation || 1,
       parent_id || null, mother_id || null, spouse_id || null, photo_url,
       bio_uz || null, bio_ru || null, bio_en || null,
-      phone || null, email || null, id,
+      phone || null, email || null,
+      telegram_chat_id ? BigInt(telegram_chat_id) : null,
+      id,
     ]
   );
 
