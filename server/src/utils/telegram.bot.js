@@ -37,6 +37,28 @@ function sendTelegramMessage(message, chatId) {
   });
 }
 
+async function sendTodayBirthdays(chatId) {
+  try {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const day = today.getDate();
+    const result = await pool.query(
+      `SELECT * FROM members
+       WHERE EXTRACT(MONTH FROM birth_date) = $1
+         AND EXTRACT(DAY FROM birth_date) = $2
+         AND death_date IS NULL`,
+      [month, day]
+    );
+    for (const member of result.rows) {
+      const age = today.getFullYear() - new Date(member.birth_date).getFullYear();
+      const msg = `🎂 Bugun ${member.name_uz}ning tug'ilgan kuni! ${age} yosh to'ldi. Tabriklaymiz! 🎉`;
+      await sendTelegramMessage(msg, chatId);
+    }
+  } catch (err) {
+    console.error('sendTodayBirthdays xatosi:', err.message);
+  }
+}
+
 async function handleWebhook(req, res) {
   const update = req.body;
   res.sendStatus(200);
@@ -67,7 +89,10 @@ async function handleWebhook(req, res) {
     }
 
     const welcomeText = `Salom, ${firstName}! 👋\n\nSiz oila daraxti botiga ro'yxatdan o'tdingiz. Endi tug'ilgan kun eslatmalari va oila yangiliklari sizga yuboriladi. 🌳🎂`;
-    sendTelegramMessage(welcomeText, chatId);
+    await sendTelegramMessage(welcomeText, chatId);
+
+    // Bugun tug'ilgan kunlari bo'lsa darhol yuboriladi
+    await sendTodayBirthdays(chatId);
   }
 }
 
