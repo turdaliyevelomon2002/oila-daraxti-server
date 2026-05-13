@@ -6,6 +6,7 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
   "orientation": "portrait",
   "background_color": "#0d0d0d",
   "theme_color": "#4a9eff",
@@ -13,6 +14,9 @@
   "dir": "ltr",
   "categories": ["lifestyle", "social"],
   "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
   "icons": [
     {
       "src": "icons/icon-192.png",
@@ -25,6 +29,22 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Daraxt ko'rish",
+      "short_name": "Daraxt",
+      "description": "Oila daraxtini ko'rish",
+      "url": "./#/",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "A'zolar ro'yxati",
+      "short_name": "A'zolar",
+      "description": "Barcha a'zolar ro'yxati",
+      "url": "./#/members",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
     }
   ],
   "screenshots": [
