@@ -1,5 +1,6 @@
 const pool = require('../config/database');
 const { sendTelegramMessage } = require('../utils/telegram.bot');
+const { uploadFile } = require('../utils/storage');
 
 async function getTree(req, res) {
   const all = await pool.query(
@@ -76,7 +77,9 @@ async function create(req, res) {
     phone, email, telegram_chat_id,
   } = req.body;
 
-  const photo_url = req.file ? `/uploads/${req.file.filename}` : null;
+  const photo_url = req.file
+    ? await uploadFile(req.file.buffer, req.file.originalname, req.file.mimetype)
+    : null;
 
   const result = await pool.query(
     `INSERT INTO members
@@ -122,7 +125,7 @@ async function update(req, res) {
   if (!existing.rows[0]) return res.status(404).json({ message: 'Topilmadi' });
 
   const photo_url = req.file
-    ? `/uploads/${req.file.filename}`
+    ? await uploadFile(req.file.buffer, req.file.originalname, req.file.mimetype)
     : existing.rows[0].photo_url;
 
   const result = await pool.query(

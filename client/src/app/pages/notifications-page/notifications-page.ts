@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NotificationService, Notification } from '../../core/services/notification';
 import { TranslateService } from '../../core/services/translate';
+import { resolveUrl } from '../../../environments/environment';
 
 @Component({
   selector: 'app-notifications-page',
@@ -40,7 +41,7 @@ export class NotificationsPageComponent implements OnInit {
 
   get unreadCount() { return this.notifications().filter(n => !n.is_read).length; }
 
-  photoUrl(url?: string) { return url ? `https://oila-daraxti-server.onrender.com${url}` : null; }
+  photoUrl(url?: string) { return resolveUrl(url); }
   t(k: string) { return this.translate.t(k); }
   getMessage(n: Notification) { return this.translate.getMessage(n); }
   formatDate(d: string) { return new Date(d).toLocaleDateString('uz-UZ'); }

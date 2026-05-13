@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Member } from '../../core/services/members';
 import { TranslateService } from '../../core/services/translate';
+import { resolveUrl } from '../../../environments/environment';
 
 @Component({
   selector: 'app-member-card',
@@ -16,7 +17,7 @@ export class MemberCardComponent {
   constructor(public translate: TranslateService) {}
 
   get name() { return this.translate.getName(this.member); }
-  get photoUrl() { return this.member.photo_url ? `https://oila-daraxti-server.onrender.com${this.member.photo_url}` : null; }
+  get photoUrl() { return resolveUrl(this.member.photo_url); }
   get initials() {
     const n = this.member.name_uz || '';
     return n.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);

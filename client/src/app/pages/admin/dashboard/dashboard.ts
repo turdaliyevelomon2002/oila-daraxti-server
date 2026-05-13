@@ -4,6 +4,7 @@ import { SlicePipe } from '@angular/common';
 import { MembersService, Member } from '../../../core/services/members';
 import { TranslateService } from '../../../core/services/translate';
 import { AdminBarComponent } from '../../../shared/admin-bar/admin-bar';
+import { resolveUrl } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-dashboard',
@@ -78,4 +79,5 @@ export class DashboardComponent implements OnInit {
 
   getName(m: Member) { return this.translate.getName(m); }
   t(k: string) { return this.translate.t(k); }
+  photoUrl(url?: string | null) { return resolveUrl(url); }
 }

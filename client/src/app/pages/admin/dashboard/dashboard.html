@@ -60,7 +60,7 @@
               <td class="td-name">
                 <div class="member-name-cell">
                   @if (m.photo_url) {
-                    <img [src]="'https://oila-daraxti-server.onrender.com' + m.photo_url" class="table-avatar" alt="" />
+                    <img [src]="photoUrl(m.photo_url)" class="table-avatar" alt="" />
                   } @else {
                     <div class="table-avatar-placeholder" [class]="m.gender">
                       {{ getName(m).charAt(0) }}

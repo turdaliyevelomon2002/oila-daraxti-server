@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Member } from '../../core/services/members';
 import { TranslateService } from '../../core/services/translate';
+import { resolveUrl } from '../../../environments/environment';
 
 @Component({
   selector: 'app-family-tree',
@@ -15,7 +16,7 @@ export class FamilyTreeComponent {
   constructor(public translate: TranslateService) {}
 
   getName(m: Member) { return this.translate.getName(m); }
-  getPhoto(m: Member) { return m.photo_url ? `https://oila-daraxti-server.onrender.com${m.photo_url}` : null; }
+  getPhoto(m: Member) { return resolveUrl(m.photo_url); }
   getInitials(m: Member) {
     return (m.name_uz || '').split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
   }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MembersService, Member } from '../../../core/services/members';
 import { TranslateService } from '../../../core/services/translate';
 import { AdminBarComponent } from '../../../shared/admin-bar/admin-bar';
+import { resolveUrl } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-member-form',
@@ -70,7 +71,7 @@ export class MemberFormComponent implements OnInit {
             email: m.email || '',
             telegram_chat_id: m.telegram_chat_id ? String(m.telegram_chat_id) : '',
           };
-          if (m.photo_url) this.photoPreview.set(`https://oila-daraxti-server.onrender.com${m.photo_url}`);
+          if (m.photo_url) this.photoPreview.set(resolveUrl(m.photo_url));
           this.loading.set(false);
         },
         error: () => this.loading.set(false),

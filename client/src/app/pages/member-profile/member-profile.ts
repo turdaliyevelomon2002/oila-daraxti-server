@@ -4,6 +4,7 @@ import { MembersService, Member } from '../../core/services/members';
 import { TranslateService } from '../../core/services/translate';
 import { MemberCardComponent } from '../../shared/member-card/member-card';
 import { AuthService } from '../../core/services/auth';
+import { resolveUrl } from '../../../environments/environment';
 
 @Component({
   selector: 'app-member-profile',
@@ -33,10 +34,7 @@ export class MemberProfileComponent implements OnInit {
     });
   }
 
-  get photoUrl() {
-    const m = this.member();
-    return m?.photo_url ? `https://oila-daraxti-server.onrender.com${m.photo_url}` : null;
-  }
+  get photoUrl() { return resolveUrl(this.member()?.photo_url); }
 
   get age(): number | null {
     const m = this.member();
@@ -52,7 +50,7 @@ export class MemberProfileComponent implements OnInit {
     });
   }
 
-  mediaUrl(url: string) { return `https://oila-daraxti-server.onrender.com${url}`; }
+  mediaUrl(url: string) { return resolveUrl(url) ?? url; }
   openLightbox(url: string) { this.lightboxSrc.set(url); }
   closeLightbox() { this.lightboxSrc.set(null); }
 

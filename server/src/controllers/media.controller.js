@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const { uploadFile } = require('../utils/storage');
 
 async function addMedia(req, res) {
   const { member_id, caption } = req.body;
@@ -7,7 +8,8 @@ async function addMedia(req, res) {
   const ext = req.file.originalname.split('.').pop().toLowerCase();
   const videoExts = ['mp4', 'mov', 'avi', 'webm', 'mkv'];
   const media_type = videoExts.includes(ext) ? 'video' : 'image';
-  const url = `/uploads/${req.file.filename}`;
+
+  const url = await uploadFile(req.file.buffer, req.file.originalname, req.file.mimetype);
 
   const result = await pool.query(
     'INSERT INTO media (member_id, media_type, url, caption) VALUES ($1,$2,$3,$4) RETURNING *',
