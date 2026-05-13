@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const initDatabase = require('./config/init');
-const { startBirthdayCron } = require('./utils/birthday.cron');
+const { startBirthdayCron, checkTodayBirthdays } = require('./utils/birthday.cron');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -13,6 +13,10 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.post('/api/check-birthdays', async (req, res) => {
+  await checkTodayBirthdays();
+  res.json({ message: 'Tug\'ilgan kunlar tekshirildi' });
+});
 
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/members', require('./routes/members.routes'));
