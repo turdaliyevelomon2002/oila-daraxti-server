@@ -1,0 +1,66 @@
+{
+  "id": "/oila-daraxti-server/",
+  "name": "Oila Daraxti",
+  "short_name": "OilaDaraxti",
+  "description": "Oila tarixi, avlodlar va xotiralar",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "portrait",
+  "background_color": "#0d0d0d",
+  "theme_color": "#4a9eff",
+  "lang": "uz",
+  "dir": "ltr",
+  "categories": ["lifestyle", "social"],
+  "prefer_related_applications": false,
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Daraxt ko'rish",
+      "short_name": "Daraxt",
+      "description": "Oila daraxtini ko'rish",
+      "url": "./#/",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "A'zolar ro'yxati",
+      "short_name": "A'zolar",
+      "description": "Barcha a'zolar ro'yxati",
+      "url": "./#/members",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Oila daraxti bosh sahifa"
+    },
+    {
+      "src": "icons/screenshot-narrow.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "A'zo profili"
+    }
+  ]
+}
