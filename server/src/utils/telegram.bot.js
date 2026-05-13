@@ -1,9 +1,9 @@
 const https = require('https');
+const pool = require('../config/database');
 
 function sendTelegramMessage(message, chatId) {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const targetChatId = chatId || process.env.TELEGRAM_CHAT_ID;
-
   if (!token || !targetChatId) return Promise.resolve();
 
   const body = JSON.stringify({ chat_id: String(targetChatId), text: message, parse_mode: 'HTML' });
@@ -14,10 +14,7 @@ function sendTelegramMessage(message, chatId) {
       port: 443,
       path: `/bot${token}/sendMessage`,
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body),
-      },
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
     };
 
     const req = https.request(options, (res) => {
@@ -33,29 +30,14 @@ function sendTelegramMessage(message, chatId) {
       });
     });
 
-    req.on('error', (err) => {
-      console.error('Telegram yuborishda xato:', err.message);
-      resolve();
-    });
-
-    req.setTimeout(10000, () => {
-      console.error('Telegram timeout');
-      req.destroy();
-      resolve();
-    });
-
+    req.on('error', (err) => { console.error('Telegram yuborishda xato:', err.message); resolve(); });
+    req.setTimeout(10000, () => { console.error('Telegram timeout'); req.destroy(); resolve(); });
     req.write(body);
     req.end();
   });
 }
 
-async function sendTelegramToMany(message, chatIds) {
-  for (const chatId of chatIds) {
-    await sendTelegramMessage(message, chatId);
-  }
-}
-
-function handleWebhook(req, res) {
+async function handleWebhook(req, res) {
   const update = req.body;
   res.sendStatus(200);
 
@@ -64,13 +46,29 @@ function handleWebhook(req, res) {
 
   const chatId = msg.chat?.id;
   const text = (msg.text || '').trim();
+  const firstName = msg.from?.first_name || '';
+  const lastName = msg.from?.last_name || '';
+  const username = msg.from?.username || null;
 
   if (text === '/start' || text.startsWith('/start ')) {
-    const reply = `Salom! 👋\n\nSizning Telegram Chat ID: <code>${chatId}</code>\n\nBu raqamni oila daraxti adminiga bering — tug'ilgan kun eslatmalari va yangiliklar sizga yuboriladi. 🎂`;
-    sendTelegramMessage(reply, chatId);
-  } else if (text === '/id') {
-    sendTelegramMessage(`Sizning Chat ID: <code>${chatId}</code>`, chatId);
+    try {
+      await pool.query(
+        `INSERT INTO telegram_users (chat_id, telegram_username, first_name, last_name)
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (chat_id) DO UPDATE
+           SET telegram_username = EXCLUDED.telegram_username,
+               first_name = EXCLUDED.first_name,
+               last_name = EXCLUDED.last_name`,
+        [chatId, username, firstName, lastName]
+      );
+      console.log(`Telegram user ro'yxatdan o'tdi: ${firstName} (${chatId})`);
+    } catch (err) {
+      console.error('Telegram user saqlashda xato:', err.message);
+    }
+
+    const welcomeText = `Salom, ${firstName}! 👋\n\nSiz oila daraxti botiga ro'yxatdan o'tdingiz. Endi tug'ilgan kun eslatmalari va oila yangiliklari sizga yuboriladi. 🌳🎂`;
+    sendTelegramMessage(welcomeText, chatId);
   }
 }
 
-module.exports = { sendTelegramMessage, sendTelegramToMany, handleWebhook };
+module.exports = { sendTelegramMessage, handleWebhook };

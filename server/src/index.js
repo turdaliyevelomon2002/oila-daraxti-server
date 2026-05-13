@@ -24,6 +24,7 @@ app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/members', require('./routes/members.routes'));
 app.use('/api/media', require('./routes/media.routes'));
 app.use('/api/notifications', require('./routes/notifications.routes'));
+app.use('/api/telegram-users', require('./routes/telegram.routes'));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

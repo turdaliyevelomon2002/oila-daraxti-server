@@ -12,6 +12,17 @@ async function initDatabase() {
   await pool.query(
     `ALTER TABLE members ADD COLUMN IF NOT EXISTS telegram_chat_id BIGINT`
   );
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS telegram_users (
+      id SERIAL PRIMARY KEY,
+      chat_id BIGINT UNIQUE NOT NULL,
+      telegram_username VARCHAR(100),
+      first_name VARCHAR(100),
+      last_name VARCHAR(100),
+      member_id INT REFERENCES members(id) ON DELETE SET NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
 
   const existing = await pool.query('SELECT id FROM admins WHERE username = $1', [
     process.env.ADMIN_USERNAME,

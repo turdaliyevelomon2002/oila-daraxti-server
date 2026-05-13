@@ -34,5 +34,10 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./pages/admin/member-form/member-form').then((m) => m.MemberFormComponent),
   },
+  {
+    path: 'admin/telegram-users',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/admin/telegram-users/telegram-users').then((m) => m.TelegramUsersComponent),
+  },
   { path: '**', redirectTo: 'home' },
 ];

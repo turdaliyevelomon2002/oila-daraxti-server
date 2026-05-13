@@ -36,16 +36,13 @@ async function checkTodayBirthdays() {
           [member.id, msgUz, msgRu, msgEn]
         );
 
-        // Barcha telegram_chat_id bo'lgan a'zolarga yuboriladi
-        const allMembers = await pool.query(
-          `SELECT telegram_chat_id FROM members WHERE telegram_chat_id IS NOT NULL`
-        );
-        for (const m of allMembers.rows) {
-          await sendTelegramMessage(msgUz, m.telegram_chat_id);
+        // Barcha ro'yxatdagi telegram foydalanuvchilarga yuboriladi
+        const tgUsers = await pool.query(`SELECT chat_id FROM telegram_users`);
+        for (const u of tgUsers.rows) {
+          await sendTelegramMessage(msgUz, u.chat_id);
         }
 
-        // Agar hech kim chat_id qo'ymagan bo'lsa — admin chatiga yuboriladi
-        if (allMembers.rows.length === 0) {
+        if (tgUsers.rows.length === 0 && process.env.TELEGRAM_CHAT_ID) {
           await sendTelegramMessage(msgUz);
         }
       }

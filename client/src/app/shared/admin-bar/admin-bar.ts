@@ -15,6 +15,7 @@ import { AuthService } from '../../core/services/auth';
         <nav class="admin-nav">
           <a routerLink="/admin" class="admin-nav-link">⚙️ Dashboard</a>
           <a routerLink="/admin/add" class="admin-nav-link gold">+ A'zo qo'shish</a>
+          <a routerLink="/admin/telegram-users" class="admin-nav-link tg">🤖 Telegram</a>
         </nav>
         <button class="admin-logout" (click)="logout()">Chiqish →</button>
       </div>
@@ -59,6 +60,7 @@ import { AuthService } from '../../core/services/auth';
       transition: all 0.2s;
       &:hover { color: #ddd; background: rgba(255,255,255,0.06); }
       &.gold { color: #ffd700; &:hover { background: rgba(255,215,0,0.1); } }
+      &.tg { color: #29a8e0; &:hover { background: rgba(41,168,224,0.1); } }
     }
     .admin-logout {
       background: transparent;
