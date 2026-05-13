@@ -3,16 +3,24 @@
   <div class="hero">
     <div class="hero-left">
       <h1 class="hero-title">🌳 {{ t('APP_TITLE') }}</h1>
-      <p class="hero-subtitle">Oila tarixi, avlodlar va xotiralar</p>
+      <p class="hero-subtitle">{{ t('HERO_SUBTITLE') }}</p>
     </div>
     <div class="stats">
       <div class="stat-card">
         <div class="stat-value">{{ totalCount }}</div>
         <div class="stat-label">{{ t('TOTAL_MEMBERS') }}</div>
       </div>
+      <div class="stat-card male-stat">
+        <div class="stat-value">{{ maleCount }}</div>
+        <div class="stat-label">{{ t('MALE_COUNT') }}</div>
+      </div>
+      <div class="stat-card female-stat">
+        <div class="stat-value">{{ femaleCount }}</div>
+        <div class="stat-label">{{ t('FEMALE_COUNT') }}</div>
+      </div>
       <div class="stat-card gen-card">
         <div class="stat-value">{{ generationCount }}</div>
-        <div class="stat-label">Avlodlar</div>
+        <div class="stat-label">{{ t('GEN_COUNT') }}</div>
       </div>
       @if (todayBirthdays.length > 0) {
         <div class="stat-card birthday-card">
@@ -23,16 +31,33 @@
     </div>
   </div>
 
-  <!-- Birthday alert -->
+  <!-- Birthday alert today -->
   @if (todayBirthdays.length > 0) {
     <div class="birthday-alert">
       <span class="birthday-icon">🎉</span>
       <span>
         @for (m of todayBirthdays; track m.id; let last = $last) {
-          <strong>{{ translate.getName(m) }}</strong>@if (!last){, }
+          <strong><a [routerLink]="['/member', m.id]">{{ getName(m) }}</a></strong>@if (!last){, }
         }
         — {{ t('BIRTHDAY_TODAY') }}
       </span>
+    </div>
+  }
+
+  <!-- Upcoming birthdays (next 14 days) -->
+  @if (upcomingBirthdays.length > 0) {
+    <div class="upcoming-section">
+      <div class="upcoming-header">
+        <span class="upcoming-title">🗓 {{ t('UPCOMING_BIRTHDAYS') }}</span>
+      </div>
+      <div class="upcoming-list">
+        @for (m of upcomingBirthdays; track m.id) {
+          <a [routerLink]="['/member', m.id]" class="upcoming-item">
+            <span class="upcoming-name">{{ getName(m) }}</span>
+            <span class="upcoming-days">{{ m.daysLeft }} {{ t('DAYS_LEFT') }}</span>
+          </a>
+        }
+      </div>
     </div>
   }
 
@@ -50,8 +75,8 @@
       />
     </div>
     <div class="view-toggle">
-      <button class="toggle-btn" [class.active]="view() === 'tree'" (click)="setView('tree')">🌲 Shajara</button>
-      <button class="toggle-btn" [class.active]="view() === 'grid'" (click)="setView('grid')">⊞ Ro'yxat</button>
+      <button class="toggle-btn" [class.active]="view() === 'tree'" (click)="setView('tree')">🌲 {{ t('TREE_VIEW') }}</button>
+      <button class="toggle-btn" [class.active]="view() === 'grid'" (click)="setView('grid')">⊞ {{ t('LIST_VIEW') }}</button>
     </div>
   </div>
 
@@ -75,8 +100,8 @@
 
     <!-- Grid View -->
     @if (view() === 'grid' || searchQuery()) {
+
       @if (searchQuery()) {
-        <!-- Search results flat -->
         <div class="members-grid">
           @for (m of filteredMembers; track m.id) {
             <app-member-card [member]="m" />
@@ -88,12 +113,23 @@
           }
         </div>
       } @else {
-        <!-- Grouped by generation -->
+        <!-- Generation filter -->
+        <div class="gen-filter">
+          <button class="gen-filter-btn" [class.active]="selectedGen() === null" (click)="setGen(null)">
+            {{ t('ALL_GEN') }}
+          </button>
+          @for (g of allGenerations; track g) {
+            <button class="gen-filter-btn" [class.active]="selectedGen() === g" (click)="setGen(g)">
+              {{ g }}-{{ t('GENERATION').toLowerCase() }}
+            </button>
+          }
+        </div>
+
         @for (gen of generationGroups; track gen.num) {
           <div class="gen-section">
             <div class="gen-header">
-              <span class="gen-num">{{ gen.num }}-avlod</span>
-              <span class="gen-count">{{ gen.members.length }} kishi</span>
+              <span class="gen-num">{{ gen.num }}-{{ t('GENERATION').toLowerCase() }}</span>
+              <span class="gen-count">{{ gen.members.length }} {{ t('TOTAL_MEMBERS').toLowerCase() }}</span>
             </div>
             <div class="members-grid">
               @for (m of gen.members; track m.id) {

@@ -28,7 +28,7 @@
 
 .stats {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
   align-self: flex-start;
 }
@@ -37,12 +37,12 @@
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  padding: 14px 20px;
+  padding: 12px 18px;
   text-align: center;
-  min-width: 100px;
+  min-width: 90px;
 
   .stat-value {
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     color: var(--gold);
     font-family: 'Playfair Display', serif;
@@ -50,7 +50,7 @@
   }
 
   .stat-label {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-muted);
     margin-top: 4px;
     text-transform: uppercase;
@@ -58,31 +58,81 @@
   }
 }
 
-.gen-card { border-color: rgba(255,215,0,0.15); }
-.birthday-card { border-color: rgba(255,215,0,0.3); background: var(--gold-muted); }
+.male-stat { border-color: rgba(74, 158, 255, 0.2); .stat-value { color: var(--male); } }
+.female-stat { border-color: rgba(255, 110, 180, 0.2); .stat-value { color: var(--female); } }
+.gen-card { border-color: var(--border-gold); }
+.birthday-card { border-color: var(--border-gold); background: var(--gold-muted); }
 
 .birthday-alert {
-  background: rgba(255, 215, 0, 0.07);
-  border: 1px solid rgba(255, 215, 0, 0.2);
+  background: var(--gold-muted);
+  border: 1px solid var(--border-gold);
   border-left: 3px solid var(--gold);
   border-radius: var(--radius-md);
   padding: 12px 18px;
   font-size: 14px;
   color: var(--gold);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+
+  a { color: var(--gold); font-weight: 600; &:hover { color: var(--gold-light); } }
 }
 
 .birthday-icon { font-size: 20px; flex-shrink: 0; }
+
+.upcoming-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 16px;
+}
+
+.upcoming-header {
+  margin-bottom: 10px;
+}
+
+.upcoming-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.upcoming-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.upcoming-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 14px;
+  text-decoration: none;
+  transition: var(--transition);
+
+  &:hover {
+    border-color: var(--border-gold);
+    background: var(--gold-muted);
+  }
+
+  .upcoming-name { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+  .upcoming-days { font-size: 11px; color: var(--gold); font-weight: 600; }
+}
 
 .toolbar {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
@@ -113,7 +163,7 @@
   outline: none;
   transition: var(--transition);
 
-  &:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.07); }
+  &:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-muted); }
   &::placeholder { color: var(--text-muted); }
 }
 
@@ -139,11 +189,30 @@
   transition: var(--transition);
 
   &:hover { color: var(--text-primary); }
+  &.active { background: var(--gold-muted); color: var(--gold); }
+}
 
-  &.active {
-    background: var(--gold-muted);
-    color: var(--gold);
-  }
+.gen-filter {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.gen-filter-btn {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: var(--transition);
+
+  &:hover { border-color: var(--border-gold); color: var(--text-primary); }
+  &.active { background: var(--gold-muted); border-color: var(--border-gold); color: var(--gold); }
 }
 
 .tree-container {
@@ -155,9 +224,7 @@
   min-height: 300px;
 }
 
-.gen-section {
-  margin-bottom: 32px;
-}
+.gen-section { margin-bottom: 32px; }
 
 .gen-header {
   display: flex;
@@ -184,7 +251,7 @@
 
 .members-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 14px;
 }
 
@@ -192,4 +259,5 @@
   .hero { flex-direction: column; }
   .hero-title { font-size: 28px; }
   .stats { width: 100%; justify-content: flex-start; }
+  .members-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
 }

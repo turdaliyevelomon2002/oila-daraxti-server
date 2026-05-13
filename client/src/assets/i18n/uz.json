@@ -1,5 +1,6 @@
 {
   "APP_TITLE": "Oila Daraxti",
+  "HERO_SUBTITLE": "Oila tarixi, avlodlar va xotiralar",
   "NAV_HOME": "Bosh sahifa",
   "NAV_TREE": "Shajara",
   "NAV_NOTIFICATIONS": "Bildirishnomalar",
@@ -52,12 +53,20 @@
   "UPLOAD_MEDIA": "Rasm/Video qo'shish",
   "TOTAL_MEMBERS": "Jami a'zolar",
   "TODAY_BIRTHDAYS": "Bugungi tug'ilgan kunlar",
+  "UPCOMING_BIRTHDAYS": "Yaqinlashayotgan tug'ilgan kunlar",
+  "DAYS_LEFT": "kun qoldi",
+  "ALL_GEN": "Barchasi",
+  "TREE_VIEW": "Shajara",
+  "LIST_VIEW": "Ro'yxat",
   "MARK_READ": "O'qilgan deb belgilash",
   "MARK_ALL_READ": "Hammasini o'qilgan deb belgilash",
   "NO_NOTIFICATIONS": "Bildirishnomalar yo'q",
+  "NOTIF_HINT": "Tug'ilgan kunlar yaqinlashganda bu yerda ko'rinadi",
   "BIRTHDAY_TODAY": "Bugun tug'ilgan kun!",
   "FAMILY_CONNECTIONS": "Oila aloqalari",
   "VIEW_PROFILE": "Profilni ko'rish",
+  "COPY_LINK": "Havolani nusxalash",
+  "LINK_COPIED": "Havola nusxalandi!",
   "BACK": "Orqaga",
   "LOADING": "Yuklanmoqda...",
   "NO_DATA": "Ma'lumot yo'q",
@@ -72,5 +81,8 @@
   "SELECT_SPOUSE": "Turmush o'rtog'ini tanlang",
   "NONE": "Yo'q",
   "ALIVE": "Hayot",
-  "DECEASED": "Vafot etgan"
+  "DECEASED": "Vafot etgan",
+  "MALE_COUNT": "Erkaklar",
+  "FEMALE_COUNT": "Ayollar",
+  "GEN_COUNT": "Avlodlar"
 }

@@ -7,9 +7,14 @@
   <div class="profile-hero" [class.male-hero]="member()!.gender === 'male'" [class.female-hero]="member()!.gender === 'female'">
     <div class="hero-inner">
       <a routerLink="/home" class="back-btn">← {{ t('BACK') }}</a>
-      @if (auth.isLoggedIn()) {
-        <a [routerLink]="['/admin/edit', member()!.id]" class="btn btn-outline btn-sm">✏️ {{ t('EDIT_MEMBER') }}</a>
-      }
+      <div class="hero-actions">
+        <button class="btn btn-outline btn-sm" (click)="copyLink()">
+          {{ linkCopied() ? '✓ ' + t('LINK_COPIED') : '🔗 ' + t('COPY_LINK') }}
+        </button>
+        @if (auth.isLoggedIn()) {
+          <a [routerLink]="['/admin/edit', member()!.id]" class="btn btn-outline btn-sm">✏️ {{ t('EDIT_MEMBER') }}</a>
+        }
+      </div>
     </div>
 
     <div class="profile-hero-content">
@@ -81,8 +86,15 @@
 
         @if (member()!.parent) {
           <div class="conn-group">
-            <h3 class="conn-title">👴 {{ t('PARENTS') }}</h3>
+            <h3 class="conn-title">👴 {{ t('FATHER') }}</h3>
             <app-member-card [member]="member()!.parent!" [compact]="true" />
+          </div>
+        }
+
+        @if (member()!.mother) {
+          <div class="conn-group">
+            <h3 class="conn-title">👩 {{ t('MOTHER') }}</h3>
+            <app-member-card [member]="member()!.mother!" [compact]="true" />
           </div>
         }
 

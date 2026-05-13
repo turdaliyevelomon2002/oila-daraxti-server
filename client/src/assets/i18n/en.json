@@ -1,5 +1,6 @@
 {
   "APP_TITLE": "Family Tree",
+  "HERO_SUBTITLE": "Family history, generations and memories",
   "NAV_HOME": "Home",
   "NAV_TREE": "Tree",
   "NAV_NOTIFICATIONS": "Notifications",
@@ -52,12 +53,20 @@
   "UPLOAD_MEDIA": "Add Photo/Video",
   "TOTAL_MEMBERS": "Total Members",
   "TODAY_BIRTHDAYS": "Today's Birthdays",
+  "UPCOMING_BIRTHDAYS": "Upcoming Birthdays",
+  "DAYS_LEFT": "days left",
+  "ALL_GEN": "All",
+  "TREE_VIEW": "Tree",
+  "LIST_VIEW": "List",
   "MARK_READ": "Mark as Read",
   "MARK_ALL_READ": "Mark All as Read",
   "NO_NOTIFICATIONS": "No notifications",
+  "NOTIF_HINT": "Birthday reminders will appear here",
   "BIRTHDAY_TODAY": "Birthday Today!",
   "FAMILY_CONNECTIONS": "Family Connections",
   "VIEW_PROFILE": "View Profile",
+  "COPY_LINK": "Copy Link",
+  "LINK_COPIED": "Link copied!",
   "BACK": "Back",
   "LOADING": "Loading...",
   "NO_DATA": "No data",
@@ -72,5 +81,8 @@
   "SELECT_SPOUSE": "Select spouse",
   "NONE": "None",
   "ALIVE": "Alive",
-  "DECEASED": "Deceased"
+  "DECEASED": "Deceased",
+  "MALE_COUNT": "Males",
+  "FEMALE_COUNT": "Females",
+  "GEN_COUNT": "Generations"
 }

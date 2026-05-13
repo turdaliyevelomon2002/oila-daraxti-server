@@ -64,6 +64,15 @@ export class MemberProfileComponent implements OnInit {
   getName(m: any) { return this.translate.getName(m); }
   getBio(m: any) { return this.translate.getBio(m); }
 
+  linkCopied = signal(false);
+
+  copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      this.linkCopied.set(true);
+      setTimeout(() => this.linkCopied.set(false), 2000);
+    });
+  }
+
   get images() { return this.member()?.media?.filter(m => m.media_type === 'image') || []; }
   get videos() { return this.member()?.media?.filter(m => m.media_type === 'video') || []; }
 }

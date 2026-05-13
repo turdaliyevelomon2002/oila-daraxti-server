@@ -5,7 +5,7 @@ export type Lang = 'uz' | 'ru' | 'en';
 
 @Injectable({ providedIn: 'root' })
 export class TranslateService {
-  private translations: Record<string, string> = {};
+  private data = signal<Record<string, string>>({});
   currentLang = signal<Lang>('uz');
 
   constructor(private http: HttpClient) {
@@ -14,15 +14,15 @@ export class TranslateService {
   }
 
   load(lang: Lang): void {
-    this.http.get<Record<string, string>>(`/assets/i18n/${lang}.json`).subscribe((data) => {
-      this.translations = data;
+    this.http.get<Record<string, string>>(`/assets/i18n/${lang}.json`).subscribe((d) => {
+      this.data.set(d);
       this.currentLang.set(lang);
       localStorage.setItem('lang', lang);
     });
   }
 
   t(key: string): string {
-    return this.translations[key] || key;
+    return this.data()[key] || key;
   }
 
   getName(item: any): string {

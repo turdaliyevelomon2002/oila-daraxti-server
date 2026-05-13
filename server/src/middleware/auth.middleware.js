@@ -7,8 +7,7 @@ function authMiddleware(req, res, next) {
   const token = header.startsWith('Bearer ') ? header.slice(7) : header;
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.admin = decoded;
+    req.admin = jwt.verify(token, process.env.JWT_SECRET);
     next();
   } catch {
     res.status(401).json({ message: 'Token noto\'g\'ri yoki muddati o\'tgan' });
